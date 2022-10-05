@@ -22,7 +22,7 @@ curl --location --request POST 'https://web2markdown-api.vercel.app/api/convert'
 
 It will return a JSON API response:
 
-```json
+```JSON
 {
     "url": "https://kirandev.com/http-post-golang",
     "title": "Make an HTTP POST request in Go",
