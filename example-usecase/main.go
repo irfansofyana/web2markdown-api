@@ -37,20 +37,17 @@ func main() {
 	defer response.Body.Close()
 
 	if err = json.NewDecoder(response.Body).Decode(&cvtResult); err != nil {
-		fmt.Println("test 1")
 		log.Fatal(err)
 	}
 
 	f, err := os.Create(fmt.Sprintf("%s.md", cvtResult.Title))
 	if err != nil {
-		fmt.Println("test 2")
 		log.Fatal(err)
 	}
 	defer f.Close()
 
 	_, err = f.WriteString(cvtResult.Data)
 	if err != nil {
-		fmt.Println("test 3")
 		log.Fatal(err)
 	}
 }
