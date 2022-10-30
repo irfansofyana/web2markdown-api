@@ -17,10 +17,11 @@ type ConversionRequest struct {
 
 // ConversionResult struct
 type ConversionResult struct {
-	URL   string `json:"url,omitempty"`
-	Title string `json:"title,omitempty"`
-	Data  string `json:"data,omitempty"`
-	Error error  `json:"error,omitempty"`
+	URL    string `json:"url,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Domain string `json:"domain,omitempty"`
+	Data   string `json:"data,omitempty"`
+	Error  error  `json:"error,omitempty"`
 }
 
 // Convert handler function to convert any web content from a certain URL to markdown
@@ -36,21 +37,23 @@ func Convert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	markdown, title, err := getWebContent(cReq.URL)
+	markdown, title, domain, err := getWebContent(cReq.URL)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	resp := ConversionResult{URL: cReq.URL, Data: markdown, Title: title, Error: nil}
+	resp := ConversionResult{URL: cReq.URL, Domain: domain, Data: markdown, Title: title, Error: nil}
 	writeResponse(w, http.StatusOK, resp)
 }
 
-func getWebContent(webURL string) (markdown string, title string, err error) {
+func getWebContent(webURL string) (markdown string, title string, domain string, err error) {
 	u, err := url.Parse(webURL)
 	if err != nil {
 		return
 	}
+
+	domain = u.Hostname()
 
 	resp, err := http.Get(webURL)
 	if err != nil {
